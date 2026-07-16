@@ -6,6 +6,7 @@ import Expense from "../pages/Expense/ExpensePage";
 import Reports from "../pages/Reports/ReportsPage";
 import Settings from "../pages/Settings/SettingsPage";
 import NotesPage from "../pages/Notes/NotesPage";
+import ReminderPage from "../pages/Reminder/ReminderPage";
 
 const AppRoutes = () => {
   return (
@@ -17,6 +18,7 @@ const AppRoutes = () => {
         <Route path="/reports" element={<Reports />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/note" element={<NotesPage/>}/>
+        <Route path="/reminder" element={<ReminderPage/>}/>
       </Routes>
     </BrowserRouter>
   );

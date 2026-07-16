@@ -6,11 +6,12 @@ import { incomeCategory } from "./data/incomeCategory";
 import { expenseCategory } from "./data/expenseCategory";
 import { cashflow } from "./data/cashflow";
 import { transactions } from "./data/transactions";
-import { reminders } from "./data/reminders";
+
 import { incomes } from "./data/incomes";
 import { expenses } from "./data/expenses";
 import { reports } from "./data/reports";
 import {notes} from "./data/notes";
+import {reminders} from "./data/reminders";
 
 export const handlers = [
 
@@ -446,6 +447,134 @@ http.patch("/api/notes/:id/archive", ({ params }) => {
   note.updated_at = new Date().toISOString();
   return HttpResponse.json(note);
 
+}),
+
+// Reminder Module APIS
+http.get("/api/reminders",()=>{
+  return HttpResponse.json(
+    reminders.filter(
+      (item)=> item.deleted_at === null
+
+    )
+  );
+}),
+
+http.get("/api/reminders/:id",({params})=>{
+  const reminder = reminders.find(
+    (item) => item.id ===params.id
+  );
+
+  if (!reminder){
+    return HttpResponse.json(
+      {message:"Reminder not found"},
+      {status:404}
+    );
+  }
+  return HttpResponse.json(reminder);
+}),
+
+http.post("/api/reminders",async ({request})=>{
+  const body = await request.json();
+  const reminder={
+    id:Date.now().toString(),
+    status:"PENDING",
+    attachments:[],
+    created_by:"user1",
+    created_at:new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    deleted_at:null,
+    ...body,
+  };
+  reminders.unshift(reminder);
+  return HttpResponse.json(reminder,{
+    status:201,
+  });
+}),
+
+http.patch("/api/reminders/:id",async ({params,request})=>{
+  const body=await request.json();
+  const index=reminders.findIndex(
+    (item)=> item.id === params.id
+  );
+
+  if(index === -1){
+    return HttpResponse.json(
+      {message:"Reminder not found"},
+      {status:404}
+    );
+  }
+  reminders[index]={
+    ...reminders[index],
+    ...body,
+    updated_at:new Date().toISOString(),
+  };
+  return HttpResponse.json(reminders[index]);
+}),
+
+http.delete("/api/reminders/:id",({params})=>{
+  const reminder = reminders.find(
+    (item)=> item.id === params.id
+  );
+
+  if (!reminder){
+    return HttpResponse.json(
+      {message:"Reminder not found"},
+      {status:404}
+    );
+  }
+  reminder.deleted_at = new Date().toISOString();
+  return HttpResponse.json({
+    message:"Reminder deleted successfully",
+  });
+}),
+
+http.patch("/api/reminders/:id/complete",({params})=>{
+  const reminder = reminders.find(
+    (item)=> item.id === params.id
+  );
+  if(!reminder){
+    return HttpResponse.json(
+      {message:"Reminder not found"},
+      {status:404}
+    );
+  }
+  reminder.status = "COMPLETED";
+  reminder.updated_at = new Date().toISOString();
+  return HttpResponse.json(reminder);
+}),
+
+http.post("/api/reminders/:id/attachments",async ({params,request})=>{
+  const reminder= reminders.find(
+    (item)=> item.id === params.id
+  );
+  if(!reminder){
+    return HttpResponse.json(
+      {message:"Reminder not found"},
+      {status:404}
+    );
+  }
+  const body = await request.json();
+  reminder.attachments.push({
+    id:crypto.randomUUID(),
+    ...body,
+  });
+  return HttpResponse.json(reminder);
+}),
+
+http.delete("/api/reminders/:id/attachments/:attachmentid",({params})=>{
+  const reminder = reminders.find(
+    (item)=> item.id === params.id
+  );
+  if(!reminder){
+    return HttpResponse.json(
+      {message:"Reminder not found"},
+      {status:404}
+    );
+  }
+  reminder.attachments = reminder.attachments.filter(
+    (file)=> file.id!== params.attachmentId
+  );
+  return HttpResponse.json(reminder);
 }),
 
 

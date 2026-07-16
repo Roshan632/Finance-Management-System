@@ -22,6 +22,7 @@ enableMocking().then(() => {
     <React.StrictMode>
       <Provider store={store}>
         <App />
+        <Toaster position="top-right"/>
       </Provider>
     </React.StrictMode>
   );

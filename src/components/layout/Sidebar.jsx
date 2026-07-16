@@ -4,8 +4,9 @@ import {
   FaMoneyBillWave,
   FaChartBar,
   FaCog,
+  FaBell,
 } from "react-icons/fa";
-import { FaNotesMedical } from "react-icons/fa6";
+import {  FaNotesMedical } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
 
 const menuItems = [
@@ -28,6 +29,12 @@ const menuItems = [
     title: "Notes",
     path: "/note",
     icon: <FaNotesMedical />,
+
+  },
+  {
+    title:"Reminder",
+    path:"/reminder",
+    icon:<FaBell/>
   },
   {
     title: "Reports",
