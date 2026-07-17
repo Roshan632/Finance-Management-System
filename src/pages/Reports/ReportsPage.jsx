@@ -1,5 +1,5 @@
 
-import React from 'react'
+
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import ReportCards from '../../components/reports/ReportCards';
 import { useGetReportsQuery } from '../../api/reportApi';

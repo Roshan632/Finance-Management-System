@@ -1,7 +1,3 @@
-
-
-
-
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useDeleteExpenseMutation } from "../../api/expenseApi";
 import toast from "react-hot-toast";

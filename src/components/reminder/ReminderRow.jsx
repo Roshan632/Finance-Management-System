@@ -57,7 +57,7 @@ const ReminderRow = ({
       {/* Title */}
       <td className="p-4">
         <div>
-          <h3 className="font-semibold">
+          <h3 className="font-semibold text-xl ">
             {reminder.title}
           </h3>
 
@@ -114,7 +114,7 @@ const ReminderRow = ({
 
       {/* Actions */}
       <td className="p-4">
-        <div className="flex items-center justify-center gap-3">
+        <div className="flex items-center justify-center gap-3 px-3 sm:px-4">
 
           <button
             onClick={() => onView(reminder.id)}

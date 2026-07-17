@@ -1,7 +1,4 @@
 
-
-
-
 import Card from "../common/Card";
 
 const ExpenseFilters = ({
@@ -11,6 +8,8 @@ const ExpenseFilters = ({
   setCategory,
   date,
   setDate,
+  paymentMethod,
+  setPaymentMethod
 }) => {
   return (
     <Card>
@@ -78,16 +77,16 @@ const ExpenseFilters = ({
 
         {/* Payment */}
 
-        <select
+        <select value={paymentMethod} onChange={(e)=>setPaymentMethod(e.target.value)}
           className="border rounded-lg p-3"
         >
-          <option>All Payment Methods</option>
-          <option>Cash</option>
-          <option>Bank Transfer</option>
-          <option>Cheque</option>
-          <option>eSewa</option>
-          <option>Khalti</option>
-          <option>Other</option>
+          <option value="All">All Payment Methods</option>
+          <option value="Cash">Cash</option>
+          <option value="Bank Transfer">Bank Transfer</option>
+          <option value="Cheque">Cheque</option>
+          <option value="eSewa">eSewa</option>
+          <option value="Khalti">Khalti</option>
+          <option value="Other">Other</option>
         </select>
 
         {/* Date */}

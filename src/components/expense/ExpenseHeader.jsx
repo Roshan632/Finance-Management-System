@@ -1,5 +1,3 @@
-
-
 import { FaPlus } from "react-icons/fa";
 
 import ExpenseModal from "./ExpenseModal";

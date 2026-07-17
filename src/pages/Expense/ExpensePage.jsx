@@ -13,6 +13,7 @@ const ExpensePage = () => {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [date, setDate] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("All");
   const [selectedExpense, setSelectedExpense] = useState(null);
   const [open, setOpen] = useState(false);
  const [viewExpenseId,setViewExpenseId] = useState(null);
@@ -31,12 +32,17 @@ const ExpensePage = () => {
           setCategory={setCategory}
           date={date}
           setDate={setDate}
+          paymentMethod={paymentMethod}
+          setPaymentMethod={setPaymentMethod}
+       
         />
 
         <ExpenseTable
           search={search}
           category={category}
           date={date}
+          paymentMethod={paymentMethod}
+          
           onEdit={(expense)=>{
             setSelectedExpense(expense);
             setOpen(true);

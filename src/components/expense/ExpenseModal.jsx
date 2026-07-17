@@ -1,6 +1,3 @@
-
-
-
 import { FaTimes } from "react-icons/fa";
 
 const ExpenseModal = ({ open, onClose, children }) => {

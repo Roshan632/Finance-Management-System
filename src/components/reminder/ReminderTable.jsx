@@ -1,64 +1,85 @@
-import { useState } from "react";
+import {  useState } from "react";
 import { useGetRemindersQuery } from "../../api/reminderApi";
 import ReminderRow from "./ReminderRow";
 
-
 const ReminderTable = ({
   search,
-  filter,
+  status,
+  priority,
+  date,
+  
   onEdit,
   onView,
+  
 }) => {
   const { data = [], isLoading } = useGetRemindersQuery();
 
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 10;
 
+ 
+
+  const changePage = (page) => {
+    setCurrentPage(page);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   if (isLoading) {
-    return <p> Loading...</p>
+    return (
+      <div className="bg-white rounded-xl shadow border p-10 text-center">
+        <p className="text-gray-500">
+          Loading reminders...
+        </p>
+      </div>
+    );
   }
 
-  let reminders = data.filter((reminder) => {
-    const matchesSearch =
-      reminder.title
-        ?.toLowerCase()
-        .includes(search.toLowerCase()) ||
-      reminder.description
-        ?.toLowerCase()
-        .includes(search.toLowerCase());
+  const reminders = data.filter((reminder) => {
+  const matchesSearch =
+    reminder.title
+      ?.toLowerCase()
+      .includes(search.toLowerCase()) ||
+    reminder.description
+      ?.toLowerCase()
+      .includes(search.toLowerCase());
 
-    if (filter === "Pending")
-      return (
-        matchesSearch &&
-        reminder.status === "PENDING"
-      );
+  const matchesStatus =
+    status === "All" ||
+    reminder.status === status;
 
-    if (filter === "Completed")
-      return (
-        matchesSearch &&
-        reminder.status === "COMPLETED"
-      );
+  const matchesPriority =
+    priority === "All" ||
+    reminder.priority === priority;
 
-    if (filter === "High")
-      return (
-        matchesSearch &&
-        reminder.priority === "HIGH"
-      );
+  const matchesDate =
+    !date ||
+    reminder.reminder_date === date;
 
-    if (filter === "Medium")
-      return (
-        matchesSearch &&
-        reminder.priority === "MEDIUM"
-      );
+  return (
+    matchesSearch &&
+    matchesStatus &&
+    matchesPriority &&
+    matchesDate
+  );
+});
 
-    if (filter === "Low")
-      return (
-        matchesSearch &&
-        reminder.priority === "LOW"
-      );
+  if (!reminders.length) {
+    return (
+      <div className="bg-white rounded-xl shadow border p-16 text-center">
+        <h2 className="text-xl font-semibold">
+          No Reminders Found
+        </h2>
 
-    return matchesSearch;
-  });
+        <p className="text-gray-500 mt-2">
+          Create your first reminder.
+        </p>
+      </div>
+    );
+  }
 
   const totalPages = Math.ceil(
     reminders.length / recordsPerPage
@@ -72,69 +93,88 @@ const ReminderTable = ({
     startIndex + recordsPerPage
   );
 
-  if (!reminders.length) {
-    return (
-      <div className="bg-white rounded-xl shadow p-12 text-center">
-        <h2 className="text-xl font-semibold">
-          No Reminders Found
-        </h2>
-
-        <p className="text-gray-500 mt-2">
-          Create your first reminder.
-        </p>
-      </div>
-    );
-  }
-
   return (
     <>
-      <div className="overflow-x-auto bg-white rounded-xl shadow">
-        <table className="min-w-full">
-          <thead className="bg-gray-100">
+      <div className="overflow-x-auto rounded-xl border bg-white shadow">
+        <table className="min-w-full divide-y divide-gray-200">
+
+          <thead className="bg-gray-50">
+
             <tr>
-              <th className="text-left p-4">Title</th>
-              <th className="text-left p-4">Date</th>
-              <th className="text-left p-4">Time</th>
-              <th className="text-left p-4">Priority</th>
-              <th className="text-left p-4">Repeat</th>
-              <th className="text-left p-4">Status</th>
-              <th className="text-center p-4">
+
+              <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                Title
+              </th>
+
+              <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                Date
+              </th>
+
+              <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                Time
+              </th>
+
+              <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                Priority
+              </th>
+
+              <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                Repeat
+              </th>
+
+              <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                Status
+              </th>
+
+              <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wider text-gray-600">
                 Actions
               </th>
+
             </tr>
+
           </thead>
 
-          <tbody>
+          <tbody className="divide-y divide-gray-100">
+
             {paginatedReminders.map((reminder) => (
+
               <ReminderRow
                 key={reminder.id}
                 reminder={reminder}
                 onEdit={onEdit}
                 onView={onView}
               />
+
             ))}
+
           </tbody>
+
         </table>
       </div>
 
       {totalPages > 1 && (
-        <div className="flex justify-between items-center mt-6">
+
+        <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+
           <p className="text-sm text-gray-500">
-            Showing {startIndex + 1}–
+
+            Showing {startIndex + 1} to{" "}
             {Math.min(
               startIndex + recordsPerPage,
               reminders.length
             )}{" "}
-            of {reminders.length}
+            of {reminders.length} reminders
+
           </p>
 
-          <div className="flex gap-2">
+          <div className="flex flex-wrap items-center justify-center gap-2">
+
             <button
               disabled={currentPage === 1}
               onClick={() =>
-                setCurrentPage((p) => p - 1)
+                changePage(currentPage - 1)
               }
-              className="px-4 py-2 border rounded disabled:opacity-50"
+              className="rounded-lg border px-4 py-2 text-sm hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Previous
             </button>
@@ -142,33 +182,38 @@ const ReminderTable = ({
             {Array.from(
               { length: totalPages },
               (_, index) => (
+
                 <button
                   key={index}
                   onClick={() =>
-                    setCurrentPage(index + 1)
+                    changePage(index + 1)
                   }
-                  className={`px-4 py-2 rounded ${
+                  className={`rounded-lg px-4 py-2 text-sm transition ${
                     currentPage === index + 1
                       ? "bg-blue-600 text-white"
-                      : "border"
+                      : "border hover:bg-gray-100"
                   }`}
                 >
                   {index + 1}
                 </button>
+
               )
             )}
 
             <button
               disabled={currentPage === totalPages}
               onClick={() =>
-                setCurrentPage((p) => p + 1)
+                changePage(currentPage + 1)
               }
-              className="px-4 py-2 border rounded disabled:opacity-50"
+              className="rounded-lg border px-4 py-2 text-sm hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Next
             </button>
+
           </div>
+
         </div>
+
       )}
     </>
   );

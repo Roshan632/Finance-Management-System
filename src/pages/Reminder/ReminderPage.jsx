@@ -28,10 +28,9 @@ const ReminderPage = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-6 px-4 sm:px-6 lg:px-8 py-6">
         <ReminderHeader
-         
-          setOpen={setOpen} 
+          setOpen={setOpen}
           setSelectedReminder={setSelectedReminder}
         />
 
@@ -46,22 +45,21 @@ const ReminderPage = () => {
           setDate={setDate}
         />
 
-        
-      
         <ReminderTable
-  search={search}
-  status={status}
-  priority={priority}
-  date={date}
-  onEdit={(reminder) => {
-    setSelectedReminder(reminder);
-    setOpen(true);
-  }}
-  onView={(id) => {
-    setViewReminderId(id);
-    setViewOpen(true);
-  }}
-/>
+          search={search}
+          status={status}
+         
+          priority={priority}
+          date={date}
+          onEdit={(reminder) => {
+            setSelectedReminder(reminder);
+            setOpen(true);
+          }}
+          onView={(id) => {
+            setViewReminderId(id);
+            setViewOpen(true);
+          }}
+        />
 
         <ReminderModal
           open={open}

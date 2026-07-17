@@ -55,18 +55,37 @@ const ReminderForm = ({ closeModal, selectedReminder }) => {
     
   });
 useEffect(() => {
-  reset(
-    selectedReminder || {
+  if (selectedReminder) {
+    reset({
+      title: selectedReminder.title || "",
+      description: selectedReminder.description || "",
+      reminder_date: selectedReminder.reminder_date || "",
+      reminder_time: selectedReminder.reminder_time || "",
+      priority: selectedReminder.priority || "MEDIUM",
+      repeat: selectedReminder.repeat || "NONE",
+      attachments: selectedReminder.attachments || [],
+    });
+
+    queueMicrotask(() => {
+      setSelectedFiles(selectedReminder.attachments || []);
+    });
+  } else {
+    reset({
       title: "",
-      
       description: "",
       reminder_date: "",
       reminder_time: "",
       priority: "MEDIUM",
       repeat: "NONE",
-    }
-  );
+      attachments: [],
+    });
+
+    queueMicrotask(() => {
+      setSelectedFiles([]);
+    });
+  }
 }, [selectedReminder, reset]);
+
 
 const handleFileChange = (e) => {
   const files = Array.from(e.target.files);
@@ -113,6 +132,7 @@ const removeFile = (index) => {
       }
 
       reset();
+      
       setSelectedFiles([]);
       setValue("attachments",[]);
 
@@ -133,10 +153,10 @@ const removeFile = (index) => {
       </h2>
 
       {/* Title */}
-
+     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
         <label className="font-medium">
-            Reminder Title
+           Enter Reminder Title:
         </label>
         <input
           type="text" placeholder="Enter Reminder Title"
@@ -151,6 +171,9 @@ const removeFile = (index) => {
       {/* Description */}
 
       <div>
+        <label className="font-medium">
+           Enter Description:
+        </label>
         <textarea rows={4}
             {...register("description")}
             className="w-full border rounded-lg p-3"
@@ -164,6 +187,9 @@ const removeFile = (index) => {
       {/* Reminder Date */}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <label className="font-medium">
+            Choose Reminder Date:
+        </label>
         <input type="date"
             {...register("reminder_date")}
             className="w-full border rounded-lg p-3"
@@ -175,6 +201,9 @@ const removeFile = (index) => {
       
 
       {/* Reminder Time */}
+      <label className="font-medium">
+            Choose Reminder Time:
+        </label>
 
         <input type="time"
             {...register("reminder_time")}
@@ -187,6 +216,9 @@ const removeFile = (index) => {
 
       {/* Priority */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <label className="font-medium">
+            Choose Priority:
+        </label>
 
       <select {...register("priority")} className="w-full border rounded-lg p-3">
             <option value="LOW">Low</option>
@@ -198,6 +230,9 @@ const removeFile = (index) => {
         </p>
 
       {/* Repeat */}
+      <label className="font-medium">
+            Choose Reminder Repeat:
+        </label>
 
       
         <select
@@ -267,6 +302,7 @@ const removeFile = (index) => {
       >
         {selectedReminder ? "Update Reminder" : "Save Reminder"}
       </button>
+      </div>
     </form>
   );
 };

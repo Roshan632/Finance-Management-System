@@ -1,5 +1,3 @@
-
-
 const ReportCards = ({ income, expense }) => {
 
   const profit = income - expense;

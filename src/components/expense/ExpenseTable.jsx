@@ -1,121 +1,3 @@
-// import Card from "../common/Card";
-// import { useGetExpensesQuery } from "../../api/expenseApi";
-// import ExpenseRow from "./ExpenseRow";
-
-// import { useState } from "react";
-
-
-// const ExpenseTable = ({search,category,date,onEdit,}) => {
-
-//      const [currentPage, setCurrentPage] = useState(1);
-
-    
- 
-
-//   const {
-//     data = [],
-//     isLoading,
-//     error,
-//   } = useGetExpensesQuery();
-
-//   if (isLoading) {
-//     return <Card>Loading...</Card>;
-//   }
-
-//   if (error) {
-//     return <Card>Something went wrong.</Card>;
-//   }
-
-//    const filteredExpense = data.filter((item) => {
-
-//   const matchSearch =
-//     item.source?.toLowerCase().includes(search.toLowerCase());
-
-//   const matchCategory =
-//     category === "All" || item.category === category;
-    
-//   const matchDate =
-//     !date || item.date === date;
-//   return matchSearch && matchCategory && matchDate;
-// });
-
-// // 2. Pagination
-
-// const itemsPerPage = 5;
-
-// const lastIndex = currentPage * itemsPerPage;
-
-// const firstIndex = lastIndex - itemsPerPage;
-
-// const currentExpense = filteredExpense.slice(firstIndex, lastIndex);
-
-// const totalPages = Math.ceil(filteredExpense.length / itemsPerPage);
-//   return (
-//     <Card>
-
-//       <table className="w-full">
-
-//         <thead>
-
-//           <tr className="border-b bg-gray-50">
-
-//             <th className="text-left p-3">Date</th>
-//             <th className="text-left p-3">Source</th>
-//             <th className="text-left p-3">Category</th>
-//             <th className="text-right p-3">Amount</th>
-//             <th className="text-left p-3">Payment</th>
-//             <th className="text-center p-3">Action</th>
-
-//           </tr>
-
-//         </thead>
-
-//         <tbody>
-
-     
-
-//           {currentExpense.map((expense) => (
-//             <ExpenseRow
-//               key={expense.id}
-//               expense={expense}
-//               onEdit={onEdit}
-//             />
-//           ))}
-
-//         </tbody>
-
-//       </table>
-//       <div className="flex justify-end items-center gap-2 mt-5">
-
-//         <button 
-//         disabled={currentPage === 1}
-//         onClick={() => setCurrentPage(currentPage -1)}
-//         className="px-3 py-2 border rounded disabled:opacity-50"
-//         >
-//             Previous
-//         </button>
-
-//         <span className="font-medium">
-//             {currentPage} / {totalPages}
-//         </span>
-
-//         <button 
-//         disabled={currentPage === totalPages}
-//         onClick={()=> setCurrentPage(currentPage + 1)}
-//         className="px-3 py-2 border rounded disabled:opacity-50"
-//         >
-//             Next
-//         </button>
-//       </div>
-
-//     </Card>
-//   );
-// };
-
-// export default ExpenseTable;
-
-
-
 import Card from "../common/Card";
 import ExpenseRow from "./ExpenseRow";
 import { useGetExpensesQuery } from "../../api/expenseApi";
@@ -125,6 +7,7 @@ const ExpenseTable = ({
   search,
   category,
   date,
+  paymentMethod,
   onEdit,
   onView,
 }) => {
@@ -164,12 +47,32 @@ const ExpenseTable = ({
       !date ||
       expense.expense_date === date;
 
+    const matchPaymentMethod = 
+    paymentMethod==="All" ||
+    expense.payment_method === paymentMethod;
+
     return (
       matchSearch &&
       matchCategory &&
-      matchDate
+      matchDate &&
+      matchPaymentMethod
     );
   });
+  if (!filteredExpense.length) {
+  return (
+    <Card>
+      <div className="py-16 text-center">
+        <h2 className="text-xl font-semibold">
+          No Expenses Found
+        </h2>
+
+        <p className="text-gray-500 mt-2">
+          No expense records match your search or filters.
+        </p>
+      </div>
+    </Card>
+  );
+}
 
   const itemsPerPage = 5;
 

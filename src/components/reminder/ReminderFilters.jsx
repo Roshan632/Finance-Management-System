@@ -20,11 +20,11 @@ const ReminderFilters = ({
   return (
     <div className="bg-white rounded-xl shadow p-5">
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
         {/* Search */}
 
-        <div className="relative">
+        <div className="relative ">
 
           <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
 
