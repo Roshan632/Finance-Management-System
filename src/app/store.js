@@ -1,22 +1,10 @@
-// import { configureStore } from "@reduxjs/toolkit";
-// import { dashboardApi } from "../services/dashboardApi";
-
-// export const store = configureStore({
-//   reducer: {
-//     [dashboardApi.reducerPath]: dashboardApi.reducer,
-//   },
-
-//   middleware: (getDefaultMiddleware) =>
-//     getDefaultMiddleware().concat(
-//       dashboardApi.middleware
-//     ),
-// });
-
 import { configureStore } from "@reduxjs/toolkit";
 import { baseApi } from "../api/baseApi";
+import authReducer from "../features/auth/authSlice";
 
 export const store = configureStore({
   reducer: {
+    auth:authReducer,
     [baseApi.reducerPath]: baseApi.reducer,
   },
 

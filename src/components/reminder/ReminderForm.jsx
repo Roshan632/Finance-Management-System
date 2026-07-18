@@ -146,24 +146,24 @@ const removeFile = (index) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-4"
+      className="space-y-4 w-full"
     >
       <h2 className="text-2xl font-bold">
         {selectedReminder ? "Update Reminder" : "Add Reminder"}
       </h2>
 
       {/* Title */}
-     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+     {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> */}
       <div>
-        <label className="font-medium">
-           Enter Reminder Title:
+        <label className="block mb-2 font-medium">
+           Enter Reminder Title :
         </label>
         <input
           type="text" placeholder="Enter Reminder Title"
           {...register("title")}
           className="w-full border rounded-lg p-3"
         />
-        <p className="text-red-500 text-sm">
+        <p className="text-red-500 text-sm mt-1">
           {errors.title?.message}
         </p>
       </div>
@@ -171,138 +171,184 @@ const removeFile = (index) => {
       {/* Description */}
 
       <div>
-        <label className="font-medium">
-           Enter Description:
+        <label className=" block mb-2 font-medium">
+           Enter Description :
         </label>
         <textarea rows={4}
             {...register("description")}
-            className="w-full border rounded-lg p-3"
+            className="w-full border rounded-lg p-3 resize-none"
         />
 
-        <p className="text-red-500 text-sm">
+        <p className="text-red-500 text-sm mt-1">
           {errors.description?.message}
         </p>
       </div>
 
       {/* Reminder Date */}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <label className="font-medium">
-            Choose Reminder Date:
+      
+        <label className=" block mb-2 font-medium">
+            Choose Reminder Date :
         </label>
         <input type="date"
             {...register("reminder_date")}
             className="w-full border rounded-lg p-3"
         />
 
-        <p className="text-red-500 text-sm">
+        <p className="text-red-500 text-sm mt-1">
           {errors.reminder_date?.message}
         </p>
+        
       
 
       {/* Reminder Time */}
-      <label className="font-medium">
-            Choose Reminder Time:
+      <div>
+      <label className="block mb-2 font-medium">
+            Choose Reminder Time :
         </label>
 
         <input type="time"
             {...register("reminder_time")}
-            className="w-full border rounded-lg p-3"
+            className=" border rounded-lg p-3"
         />
-        <p className="text-red-500 text-sm">
+        <p className="text-red-500 text-sm mt-1">
             {errors.reminder_time?.message}
         </p>
         </div>
 
       {/* Priority */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <label className="font-medium">
-            Choose Priority:
-        </label>
+           {/* Priority & Repeat */}
 
-      <select {...register("priority")} className="w-full border rounded-lg p-3">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <div>
+          <label className="block mb-2 font-medium">
+            Choose Priority :
+          </label>
+
+          <select
+            {...register("priority")}
+            className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-green-500 outline-none"
+          >
             <option value="LOW">Low</option>
             <option value="MEDIUM">Medium</option>
             <option value="HIGH">High</option>
-        </select>
-        <p className="text-red-500 text-sm">
+          </select>
+
+          <p className="text-red-500 text-sm mt-1">
             {errors.priority?.message}
-        </p>
+          </p>
+        </div>
 
-      {/* Repeat */}
-      <label className="font-medium">
-            Choose Reminder Repeat:
-        </label>
+        <div>
+          <label className="block mb-2 font-medium">
+            Choose Reminder Repeat :
+          </label>
 
-      
-        <select
-            {...register("repeat")} className="w-full border rounded-lg p-3">
+          <select
+            {...register("repeat")}
+            className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-green-500 outline-none"
+          >
             <option value="NONE">None</option>
             <option value="DAILY">Daily</option>
             <option value="WEEKLY">Weekly</option>
             <option value="MONTHLY">Monthly</option>
             <option value="YEARLY">Yearly</option>
-        </select>
+          </select>
 
-        <p className="text-red-500 text-sm">
-          {errors.repeat?.message}
-        </p>
+          <p className="text-red-500 text-sm mt-1">
+            {errors.repeat?.message}
+          </p>
+        </div>
+
       </div>
 
       {/* Attachments */}
 
       <div>
-        <label className="block text-sm font-medium mb-2">
+
+        <label className="block mb-2 font-medium">
           Attachments
         </label>
 
-        <input type="file" multiple accept=".pdf,.jpeg,.png,.doc,.docx"
-        onChange={handleFileChange}
-        className="w-full border rounded-lg p-3"
+        <input
+          type="file"
+          multiple
+          accept=".pdf,.png,.jpg,.jpeg,.doc,.docx"
+          onChange={handleFileChange}
+          className="w-full border rounded-lg p-3"
         />
 
         {selectedFiles.length > 0 && (
-  <div className="mt-3 border rounded-lg p-3 bg-gray-50">
 
-    <div className="font-semibold border-b pb-2 mb-2">
-      Selected Attachments
-    </div>
+          <div className="mt-4 border rounded-xl p-4 bg-gray-50">
 
-    {selectedFiles.map((file, index) => (
-      <div
-        key={index}
-        className="flex justify-between items-center py-2 border-b last:border-none"
-      >
-        <div>
-          <p className="font-medium">
-            📎 {file.fileName || file.name}
-          </p>
+            <h3 className="font-semibold mb-3">
+              Selected Attachments
+            </h3>
 
-          <p className="text-xs text-gray-500">
-            {((file.fileSize || file.size) / 1024).toFixed(2)} KB
-          </p>
-        </div>
+            <div className="space-y-3">
+
+              {selectedFiles.map((file, index) => (
+
+                <div
+                  key={index}
+                  className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 border rounded-lg p-3 bg-white"
+                >
+
+                  <div className="flex-1">
+
+                    <p className="font-medium break-all">
+                      📎 {file.fileName || file.name}
+                    </p>
+
+                    <p className="text-xs text-gray-500">
+
+                      {(
+                        (file.fileSize || file.size) /
+                        1024
+                      ).toFixed(2)}{" "}
+                      KB
+
+                    </p>
+
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => removeFile(index)}
+                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+                  >
+                    Remove
+                  </button>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          </div>
+
+        )}
+
+      </div>
+
+      {/* Submit Button */}
+
+      <div className="pt-2">
 
         <button
-          type="button"
-          onClick={() => removeFile(index)}
-          className="text-red-600 hover:text-red-800 text-sm"
+          type="submit"
+          className="w-full bg-green-600 hover:bg-green-700 transition text-white font-semibold py-3 rounded-lg"
         >
-          Remove
+          {selectedReminder
+            ? "Update Reminder"
+            : "Save Reminder"}
         </button>
-      </div>
-    ))}
-  </div>
-)}
+
       </div>
 
-      <button
-        type="submit"
-        className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg"
-      >
-        {selectedReminder ? "Update Reminder" : "Save Reminder"}
-      </button>
-      </div>
     </form>
   );
 };
